@@ -1,5 +1,7 @@
 package io.aurorasolutions.montyhall.domain.game;
 
+import io.aurorasolutions.montyhall.domain.common.IEntity;
+import io.aurorasolutions.montyhall.domain.common.ValidationUtil;
 import io.aurorasolutions.montyhall.domain.door.Door;
 import io.aurorasolutions.montyhall.domain.door.DoorStatus;
 import io.aurorasolutions.montyhall.domain.host.Host;
@@ -13,7 +15,7 @@ import java.util.*;
  *
  * Playing the game Monty Hall! Should the player switch the door or not?
  */
-public class Game {
+public class Game implements IEntity<Game> {
 
     // unique identifier for the game
     private Long id;
@@ -73,9 +75,7 @@ public class Game {
      * @param id door id
      */
     private void setId(Long id) {
-        if(id < 0) {
-            throw new IllegalArgumentException("The game id must be > 0!");
-        }
+        ValidationUtil.validateLong(id, "game");
         this.id = id;
     }
 
@@ -155,6 +155,15 @@ public class Game {
     }
 
     /**
+     * Get a random door
+     *
+     * @return a random door
+     */
+    public Door getRandomDoor() {
+        return this.getDoors()[this.getRandomDoorNumber() - 1];
+    }
+
+    /**
      * Did the player win the game?
      *
      * @return true or false
@@ -175,7 +184,7 @@ public class Game {
         }
 
         Door toSelect = this.doors[door.getDoorId() - 1];
-        toSelect.changeDoorStatus(DoorStatus.SELECTED);
+        toSelect.updateDoorStatus(DoorStatus.SELECTED);
         doorSelectedByPlayer = toSelect;
 
         GameEvent selectEvent =  door.getDoorId() == 1
@@ -229,6 +238,7 @@ public class Game {
         doorsSet.remove(doorSelectedByPlayer);
         doorsSet.remove(doorRevealedByHost);
         Door switchedDoor = doorsSet.first();
+        switchedDoor.updateDoorStatus(DoorStatus.SELECTED);
         // update the door selected by player
         this.doorSelectedByPlayer = switchedDoor;
 
@@ -241,7 +251,7 @@ public class Game {
     }
 
     /**
-     * Opens a door and returns the game status
+     * Opens a door and returns the game status.
      *
      * @param door to open
      * @return game won or lost
@@ -252,7 +262,7 @@ public class Game {
         }
 
         Door toOpen = this.doors[door.getDoorId() -1];
-        toOpen.changeDoorStatus(DoorStatus.OPENED);
+        toOpen.updateDoorStatus(DoorStatus.OPENED);
 
         Prize prize = toOpen.getPrize();
         if (prize == Prize.ASTON_MARTIN) {
@@ -275,4 +285,37 @@ public class Game {
 
         return this.status;
     }
+
+    /**
+     *
+     * @param other game
+     * @return true of false
+     */
+    @Override
+    public boolean sameIdentityAs(final Game other) {
+        return other != null
+                && this.getId().equals(other.getId());
+    }
+
+    /**
+     * @param object
+     *            to compare
+     * @return True if they have the same identity
+     * @see #sameIdentityAs(Game)
+     */
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object){
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()){
+            return false;
+        }
+
+        final Game other = (Game) object;
+        return sameIdentityAs(other);
+    }
+
+    //TODO: Implement toString()
+    //TODO: Implement hashCode()
 }

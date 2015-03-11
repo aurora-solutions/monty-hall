@@ -3,7 +3,7 @@ package io.aurorasolutions.montyhall.domain.common;
 /**
  * Created by Rasheed on 2015-03-09.
  */
-public class Person {
+public abstract class Person implements IEntity<Person> {
 
     // first name of the person
     private String firstName;
@@ -65,4 +65,38 @@ public class Person {
     public String getFullName() {
         return firstName.concat(" ").concat(lastName);
     }
+
+    /**
+     *
+     * @param other
+     * @return
+     */
+    @Override
+    public boolean sameIdentityAs(final Person other) {
+        return other != null
+                && this.getFirstName().equals(other.getFirstName())
+                && this.getLastName().equals(other.getLastName());
+    }
+
+    /**
+     * @param object
+     *            to compare
+     * @return True if they have the same identity
+     * @see #sameIdentityAs(Person)
+     */
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object){
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()){
+            return false;
+        }
+
+        final Person other = (Person) object;
+        return sameIdentityAs(other);
+    }
+
+    //TODO: Implement toString()
+    //TODO: Implement hashCode()
 }

@@ -5,9 +5,7 @@ package io.aurorasolutions.montyhall.domain.game;
  */
 public enum GameStatus {
     AWAITING_INITIAL_SELECTION,
-    INITIAL_SELECTED,
     AWAITING_FINAL_SELECTION,
-    FINAL_SELECTED,
     WON,
     LOST
 }

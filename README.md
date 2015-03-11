@@ -11,4 +11,17 @@ Create a program which verifies and reports to the user that in the [Monty Hall 
 1. JAVA 7
 2. Maven 3
 
+## About application:
+1. DDD has been followed
+2. TDD has been followed with 36 automated tests
+3. Code has been thoroughly documented!
+4. Two test dependencies "junit" & "hamcrest"
+
 ## Run
+1. download montyhall.zip
+2. unzip it
+3. cd MontyHall/
+4. mvn package
+5. java -jar target/montyhall.jar 500
+
+"500" is the number of games! Enjoy...

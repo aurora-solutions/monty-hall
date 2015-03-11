@@ -4,6 +4,7 @@ import io.aurorasolutions.montyhall.domain.door.Door;
 import io.aurorasolutions.montyhall.domain.game.Game;
 import io.aurorasolutions.montyhall.domain.host.Host;
 import io.aurorasolutions.montyhall.domain.player.Player;
+import io.aurorasolutions.montyhall.util.ParsingUtil;
 
 /**
  * Created by Rasheed on 2015-03-10.
@@ -65,7 +66,7 @@ public class GameSet {
      *
      * @return number of wins
      */
-    private Long countWinsOnSwitching() {
+    public Long countWinsOnSwitching() {
 
         Long countWins = 0L;
 
@@ -87,7 +88,7 @@ public class GameSet {
      *
      * @return number of wins
      */
-    private Long countWinsWithoutSwitching() {
+    public Long countWinsWithoutSwitching() {
 
         Long countWins = 0L;
 
@@ -123,11 +124,11 @@ public class GameSet {
      *
      * @return "no matter", "yes" or "no"
      */
-    static String isItBetterToSwitch(Long winsOnSwitching, Long winsWithoutSwitching) {
+    public static String isItBetterToSwitch(Long winsOnSwitching, Long winsWithoutSwitching) {
         if (winsOnSwitching == winsWithoutSwitching) {
-            return "no matter";
+            return SwitchDoorBetter.DOES_NOT_MATTER.toString();
         }
-        return winsOnSwitching > winsWithoutSwitching ? "yes" : "no";
+        return winsOnSwitching > winsWithoutSwitching ? SwitchDoorBetter.YES.toString() : SwitchDoorBetter.NO.toString();
     }
 
     /**
@@ -137,9 +138,14 @@ public class GameSet {
      */
     public static void main(String[] args) {
         try {
-            System.out.println("\nStarting Monty Hall Game! Get Ready...");
+            if (args.length == 0) {
+                throw new IllegalArgumentException(
+                        "Enter the number of games you will run as argument.");
+            }
 
-            Long numberOfGames = 1000L;
+            Long numberOfGames = ParsingUtil.toLong(args[0]);
+
+            System.out.println("\nStarting Monty Hall Game! Get Ready...");
 
             GameSet gameSet = new GameSet(numberOfGames);
             System.out.println(String.format("\nWarm welcome to %s by %s", gameSet.getPlayer().getFullName(),
@@ -158,7 +164,7 @@ public class GameSet {
                             + winsOnSwitching);
             System.out.println(
                     "Is it better to switch the door?                   "
-                            + isItBetterToSwitch(winsOnSwitching, winsWithoutSwitching) + "\n");
+                            + gameSet.isItBetterToSwitch(winsOnSwitching, winsWithoutSwitching) + "\n");
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }

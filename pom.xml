@@ -12,6 +12,15 @@
     <description>Simulation of MontyHall problem</description>
     <url>https://github.com/aurora-solutions/monty-hall</url>
 
+    <developers>
+        <developer>
+            <id>rasheed</id>
+            <name>Rasheed Amir</name>
+            <organization>Aurora Solutions</organization>
+            <email>rasheed@aurorasolutions.io</email>
+        </developer>
+    </developers>
+
     <properties>
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,6 +48,7 @@
     </dependencies>
 
     <build>
+        <finalName>montyhall</finalName>
         <plugins>
             <!-- The Enforcer plugin provides goals to control certain environmental
                 constraints such as Maven version, JDK version and OS family along with many
@@ -84,6 +94,19 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <compilerArgument></compilerArgument>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

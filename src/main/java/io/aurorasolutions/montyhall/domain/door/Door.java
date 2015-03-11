@@ -1,11 +1,13 @@
 package io.aurorasolutions.montyhall.domain.door;
 
+import io.aurorasolutions.montyhall.domain.common.IEntity;
 import io.aurorasolutions.montyhall.domain.prize.Prize;
 
 /**
  * Created by Rasheed on 2015-03-09.
+ *
  */
-public class Door implements Comparable<Door> {
+public class Door implements Comparable<Door>, IEntity<Door> {
 
     // a unique identifier of the door
     private int doorId;
@@ -63,21 +65,22 @@ public class Door implements Comparable<Door> {
      * @return
      */
     public DoorStatus getDoorStatus(){
-        return this.getDoorStatus();
+        return this.doorStatus;
     }
 
     /**
-     *
+     * Opens the door
      */
     public void reveal() {
         this.doorStatus = DoorStatus.OPENED;
     }
 
     /**
+     * Updates the door status
      *
-     * @param newDoorStatus
+     * @param newDoorStatus new door status
      */
-    public void changeDoorStatus(DoorStatus newDoorStatus) {
+    public void updateDoorStatus(DoorStatus newDoorStatus) {
         boolean illegalTransitionAttempted = false;
         switch (newDoorStatus) {
             case CLOSED :
@@ -109,4 +112,37 @@ public class Door implements Comparable<Door> {
     public int compareTo(final Door otherDoor) {
         return Integer.compare(this.doorId, otherDoor.doorId);
     }
+
+    /**
+     *
+     * @param other
+     * @return
+     */
+    @Override
+    public boolean sameIdentityAs(final Door other) {
+        return other != null
+                && (this.getDoorId() == other.getDoorId());
+    }
+
+    /**
+     * @param object
+     *            to compare
+     * @return True if they have the same identity
+     * @see #sameIdentityAs(Door)
+     */
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object){
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()){
+            return false;
+        }
+
+        final Door other = (Door) object;
+        return sameIdentityAs(other);
+    }
+
+    //TODO: Implement toString()
+    //TODO: Implement hashCode()
 }
